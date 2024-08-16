@@ -38,7 +38,32 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-    // write your solution here
+    // разделяем бинарную строку на блоки по 10 символов, потому что каждая буква это 10 символов
+    let result = '';
+    for (let i = 0; i < expr.length; i += 10) {
+        const block = expr.slice(i, i + 10); // разрезаем на блоки из 10 символов
+
+        if (block === '**********') {
+            result += ' '; // на случай проблела
+        } else {
+            // переделываем бинарный блок в морзе
+            let morseCode = '';
+
+            for (let j = 0; j < block.length; j += 2) {
+                const pair = block.slice(j, j + 2); // проверяем пары символов (10 или 11)
+                if (pair === '10') {
+                    morseCode += '.'; // заменяем 10 на точку
+                } else if (pair === '11') {
+                    morseCode += '-'; // заменяем 11 на тире
+                }
+            }
+            
+            // поиск буквы по словарю и добавление её к результату
+            result += MORSE_TABLE[morseCode] || '';
+        }
+    }
+
+    return result;
 }
 
 module.exports = {
